@@ -4,6 +4,7 @@ import {
     getTransactions,
     getWallet,
     paymentWallet,
+    suspendWallet,
     topUpWallet,
     transferFunds
 } from '../controllers/wallet.controller';
@@ -24,5 +25,7 @@ router.post('/transfer', validate(transferSchema), transferFunds);
 
 router.get('/:id', getWallet);
 router.get('/:id/transactions', getTransactions);
+
+router.patch('/:id/status', suspendWallet);
 
 export default router;

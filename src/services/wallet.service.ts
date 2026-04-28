@@ -160,3 +160,13 @@ export const getTransactionHistory = async (walletId: string) => {
     orderBy: { created_at: 'desc' },
   });
 };
+
+export const updateWalletStatus = async (id: string, status: 'ACTIVE' | 'SUSPENDED') => {
+  const wallet = await prisma.wallet.findUnique({ where: { id } });
+  if (!wallet) throw new AppError(404, 'Wallet tidak ditemukan');
+
+  return await prisma.wallet.update({
+    where: { id },
+    data: { status },
+  });
+};

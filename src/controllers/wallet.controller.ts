@@ -102,3 +102,19 @@ export const getTransactions = async (req: Request, res: Response, next: NextFun
     next(error);
   }
 };
+
+export const suspendWallet = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const result = await WalletService.updateWalletStatus(id, status);
+
+    res.status(200).json({
+      message: `Wallet berhasil di-${status.toLowerCase()}`,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
