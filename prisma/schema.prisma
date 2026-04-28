@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Wallet {
+  id       String  @id @default(uuid())
+  owner_id String
+  currency String
+  balance  Decimal @default(0.00) @db.Decimal(19, 4)
+  status   Status  @default(ACTIVE)
+
+  ledgers Ledger[]
+
+  @@unique([owner_id, currency])
+}
+
+model Ledger {
+  id               String   @id @default(uuid())
+  wallet_id        String
+  transaction_type TxType
+  amount           Decimal  @db.Decimal(19, 4)
+  currency         String
+  reference_id     String?  @unique
+  created_at       DateTime @default(now())
+
+  wallet Wallet @relation(fields: [wallet_id], references: [id])
+}
+
+enum Status {
+  ACTIVE
+  SUSPENDED
+}
+
+enum TxType {
+  TOPUP
+  PAYMENT
+  TRANSFER_IN
+  TRANSFER_OUT
+}
