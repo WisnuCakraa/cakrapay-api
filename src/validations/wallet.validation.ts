@@ -21,3 +21,22 @@ export const topUpSchema = z.object({
       .min(1, 'reference_id wajib ada untuk mencegah duplikasi'),
   }),
 });
+
+export const paymentSchema = z.object({
+  params: z.object({
+    id: z.uuid('ID Wallet tidak valid'),
+  }),
+  body: z.object({
+    amount: z.number().positive('Jumlah pembayaran harus lebih dari 0'),
+    reference_id: z.string().min(1, 'reference_id wajib ada'),
+  }),
+});
+
+export const transferSchema = z.object({
+  body: z.object({
+    sender_id: z.uuid('ID pengirim tidak valid'),
+    receiver_id: z.uuid('ID penerima tidak valid'),
+    amount: z.number().positive('Jumlah transfer harus lebih dari 0'),
+    reference_id: z.string().min(1, 'reference_id wajib ada'),
+  }),
+});
