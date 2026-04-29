@@ -47,7 +47,7 @@ describe('Wallet Service Unit Tests', () => {
 
       expect(prismaMock.wallet.update).toHaveBeenCalledWith(expect.objectContaining({
         where: { id: mockWalletA.id },
-        data: { balance: new Decimal(1500) }
+        data: { balance: { increment: new Decimal(500) } }
       }));
     });
 
@@ -64,6 +64,18 @@ describe('Wallet Service Unit Tests', () => {
       await expect(WalletService.topUp('invalid-id', 100, 'ref'))
         .rejects.toThrow('Wallet tidak ditemukan');
     });
+
+    it('should throw error for invalid precision (e.g., 0.001)', async () => {
+      prismaMock.wallet.findUnique.mockResolvedValue(mockWalletA);
+      await expect(WalletService.topUp(mockWalletA.id, 0.001, 'ref'))
+        .rejects.toThrow('Presisi jumlah tidak valid (maksimal 2 angka di belakang koma)');
+    });
+
+    it('should throw error for amount less than 0.01', async () => {
+      prismaMock.wallet.findUnique.mockResolvedValue(mockWalletA);
+      await expect(WalletService.topUp(mockWalletA.id, 0, 'ref'))
+        .rejects.toThrow('Jumlah minimal adalah 0.01');
+    });
   });
 
   describe('payment()', () => {
@@ -76,7 +88,7 @@ describe('Wallet Service Unit Tests', () => {
 
       expect(prismaMock.wallet.update).toHaveBeenCalledWith(expect.objectContaining({
         where: { id: mockWalletA.id },
-        data: { balance: new Decimal(800) }
+        data: { balance: { increment: new Decimal(-200) } }
       }));
     });
 
@@ -100,6 +112,18 @@ describe('Wallet Service Unit Tests', () => {
       await expect(WalletService.payment(mockWalletA.id, 100, 'ref'))
         .rejects.toThrow('Wallet sedang ditangguhkan');
     });
+
+    it('should throw error for invalid precision (e.g., 0.001)', async () => {
+      prismaMock.wallet.findUnique.mockResolvedValue(mockWalletA);
+      await expect(WalletService.payment(mockWalletA.id, 0.001, 'ref'))
+        .rejects.toThrow('Presisi jumlah tidak valid (maksimal 2 angka di belakang koma)');
+    });
+
+    it('should throw error for amount less than 0.01', async () => {
+      prismaMock.wallet.findUnique.mockResolvedValue(mockWalletA);
+      await expect(WalletService.payment(mockWalletA.id, 0, 'ref'))
+        .rejects.toThrow('Jumlah minimal adalah 0.01');
+    });
   });
 
   describe('transfer()', () => {
@@ -113,7 +137,14 @@ describe('Wallet Service Unit Tests', () => {
 
       await WalletService.transfer(mockWalletA.id, mockWalletB.id, 300, 'ref-trf-1');
 
-      expect(prismaMock.wallet.update).toHaveBeenCalledTimes(2);
+      expect(prismaMock.wallet.update).toHaveBeenCalledWith(expect.objectContaining({
+        where: { id: mockWalletA.id },
+        data: { balance: { increment: new Decimal(-300) } }
+      }));
+      expect(prismaMock.wallet.update).toHaveBeenCalledWith(expect.objectContaining({
+        where: { id: mockWalletB.id },
+        data: { balance: { increment: new Decimal(300) } }
+      }));
     });
 
     it('should prevent cross-currency transfer', async () => {
@@ -152,6 +183,22 @@ describe('Wallet Service Unit Tests', () => {
 
       await expect(WalletService.transfer(mockWalletA.id, mockWalletB.id, 5000, 'ref-err'))
         .rejects.toThrow('Saldo pengirim tidak mencukupi');
+    });
+
+    it('should throw error for invalid precision (e.g., 0.001)', async () => {
+      prismaMock.wallet.findUnique
+        .mockResolvedValueOnce(mockWalletA)
+        .mockResolvedValueOnce(mockWalletB);
+      await expect(WalletService.transfer(mockWalletA.id, mockWalletB.id, 0.001, 'ref'))
+        .rejects.toThrow('Presisi jumlah tidak valid (maksimal 2 angka di belakang koma)');
+    });
+
+    it('should throw error for amount less than 0.01', async () => {
+      prismaMock.wallet.findUnique
+        .mockResolvedValueOnce(mockWalletA)
+        .mockResolvedValueOnce(mockWalletB);
+      await expect(WalletService.transfer(mockWalletA.id, mockWalletB.id, 0, 'ref'))
+        .rejects.toThrow('Jumlah minimal adalah 0.01');
     });
   });
 

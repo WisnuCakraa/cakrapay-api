@@ -1,0 +1,552 @@
+opencollection: 1.0.0
+info:
+  name: cakrapay
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ''
+      port: ''
+      auth:
+        username: ''
+        password: ''
+      bypassProxy: ''
+items:
+  - info:
+      name: suspend user
+      type: http
+      seq: 6
+    http:
+      method: patch
+      url: http://localhost:3000/api/wallets/8b38fd82-a808-432e-950a-fd2f43747872/status
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": "ACTIVE"
+            
+          }
+          //ENUM =  ACTIVE | SUSPENDED
+      auth: inherit
+    settings:
+      encodeUrl: false
+      timeout: 0
+      followRedirects: true
+      maxRedirects: 5
+  - info:
+      name: User 1 USD
+      type: folder
+      seq: 4
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Top Up Wallet
+          type: http
+          seq: 1
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/f36db4fd-a7f3-4d6a-966c-235f2773f49d/topup
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "amount": 12.345,
+                "reference_id": "tx-unique-1s"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Transaction By Id
+          type: http
+          seq: 6
+        http:
+          method: GET
+          url: http://localhost:3000/api/wallets/f36db4fd-a7f3-4d6a-966c-235f2773f49d/transactions
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Transfer Wallet
+          type: http
+          seq: 4
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/transfer
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "sender_id": "4a462730-afd7-41f9-a923-a75fa349d880",
+                "receiver_id": "8b38fd82-a808-432e-950a-fd2f43747872",
+                "amount": 50,
+                
+                "reference_id": "trf-unique-SAGFS"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Wallet By Id
+          type: http
+          seq: 5
+        http:
+          method: get
+          url: http://localhost:3000/api/wallets/f36db4fd-a7f3-4d6a-966c-235f2773f49d
+          auth: inherit
+        settings:
+          encodeUrl: false
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Payment Wallet
+          type: http
+          seq: 5
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/f36db4fd-a7f3-4d6a-966c-235f2773f49d/payment
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: "{\r\n  \"amount\": 2500.00,\r\n  \"reference_id\": \"pay-order-001\"\r\n}"
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Create Wallet
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "owner_id": "user-001",
+                "currency": "EUR"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: User 2 USD
+      type: folder
+      seq: 5
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Transaction By Id
+          type: http
+          seq: 6
+        http:
+          method: GET
+          url: http://localhost:3000/api/wallets/f36db4fd-a7f3-4d6a-966c-235f2773f49d/transactions
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Transfer Wallet
+          type: http
+          seq: 1
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/transfer
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "sender_id": "e33774b2-5e58-47e3-990b-89575c9346ea",
+                "receiver_id": "f36db4fd-a7f3-4d6a-966c-235f2773f49d",
+                "amount": 1000,
+                "reference_id": "trf-unique-999"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Wallet By Id
+          type: http
+          seq: 5
+        http:
+          method: get
+          url: http://localhost:3000/api/wallets/e33774b2-5e58-47e3-990b-89575c9346ea
+          auth: inherit
+        settings:
+          encodeUrl: false
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Create Wallet
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "owner_id": "user-002",
+                "currency": "USD"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Payment Wallet
+          type: http
+          seq: 4
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/e33774b2-5e58-47e3-990b-89575c9346ea/payment
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "amount": 1600.00,
+                "reference_id": "pay-order-56"
+                
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Top Up Wallet
+          type: http
+          seq: 3
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/e33774b2-5e58-47e3-990b-89575c9346ea/topup
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: "{\r\n  \"amount\": 10000,\r\n  \"reference_id\": \"tx-unique-123\"\r\n}"
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: User 3 USD
+      type: folder
+      seq: 5
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Create Wallet
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "owner_id": "user-003",
+                "currency": "USD"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Payment Wallet
+          type: http
+          seq: 4
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/f7c32b8f-65f7-452e-a6bf-79675426d9ef/payment
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "amount": 0.001,
+                "reference_id": "pay-order-0001"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Top Up Wallet
+          type: http
+          seq: 3
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/f7c32b8f-65f7-452e-a6bf-79675426d9ef/topup
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "amount": 12.345,
+                "reference_id": "tx-unique-12345"
+                
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Transfer Wallet
+          type: http
+          seq: 1
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/transfer
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "sender_id": "f7c32b8f-65f7-452e-a6bf-79675426d9ef",
+                "receiver_id": "f36db4fd-a7f3-4d6a-966c-235f2773f49d",
+                "amount": 1000,
+                "reference_id": "trf-unique-999"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Transaction By Id
+          type: http
+          seq: 6
+        http:
+          method: GET
+          url: http://localhost:3000/api/wallets/f7c32b8f-65f7-452e-a6bf-79675426d9ef/transactions
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Wallet By Id
+          type: http
+          seq: 5
+        http:
+          method: get
+          url: http://localhost:3000/api/wallets/f7c32b8f-65f7-452e-a6bf-79675426d9ef
+          auth: inherit
+        settings:
+          encodeUrl: false
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: User 4 EUR
+      type: folder
+      seq: 6
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Wallet By Id
+          type: http
+          seq: 5
+        http:
+          method: get
+          url: http://localhost:3000/api/wallets/8b38fd82-a808-432e-950a-fd2f43747872
+          auth: inherit
+        settings:
+          encodeUrl: false
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Transfer Wallet
+          type: http
+          seq: 1
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/transfer
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "sender_id": "8b38fd82-a808-432e-950a-fd2f43747872",
+                "receiver_id": "f36db4fd-a7f3-4d6a-966c-235f2773f49d",
+                "amount": 40,
+                "reference_id": "trf-unique-999"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Transaction By Id
+          type: http
+          seq: 6
+        http:
+          method: GET
+          url: http://localhost:3000/api/wallets/8b38fd82-a808-432e-950a-fd2f43747872/transactions
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Create Wallet
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "owner_id": "user-004",
+                
+                "currency": "EUR"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Payment Wallet
+          type: http
+          seq: 4
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/8b38fd82-a808-432e-950a-fd2f43747872/payment
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "amount": 0.11,
+                "reference_id": "pay-order-0001"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Top Up Wallet
+          type: http
+          seq: 3
+        http:
+          method: POST
+          url: http://localhost:3000/api/wallets/8b38fd82-a808-432e-950a-fd2f43747872/topup
+          headers:
+            - name: Content-Type
+              value: application/json
+          body:
+            type: json
+            data: |-
+              {
+                "amount": 543.21,
+                "reference_id": "tx-unique-asd"
+                
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+bundled: true
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
+    exportedAt: '2026-04-29T10:29:53.578Z'
+    exportedUsing: Bruno

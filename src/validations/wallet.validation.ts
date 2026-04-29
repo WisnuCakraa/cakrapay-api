@@ -15,7 +15,7 @@ export const topUpSchema = z.object({
     id: z.uuid('ID Wallet tidak valid'),
   }),
   body: z.object({
-    amount: z.number().positive('Jumlah top-up harus lebih dari 0'),
+    amount: z.number().min(0.01, 'Jumlah harus minimal 0.01').multipleOf(0.01, 'Jumlah tidak boleh memiliki lebih dari 2 angka di belakang koma'),
     reference_id: z
       .string()
       .min(1, 'reference_id wajib ada untuk mencegah duplikasi'),
@@ -27,7 +27,7 @@ export const paymentSchema = z.object({
     id: z.uuid('ID Wallet tidak valid'),
   }),
   body: z.object({
-    amount: z.number().positive('Jumlah pembayaran harus lebih dari 0'),
+    amount: z.number().min(0.01, 'Jumlah harus minimal 0.01').multipleOf(0.01, 'Jumlah tidak boleh memiliki lebih dari 2 angka di belakang koma'),
     reference_id: z.string().min(1, 'reference_id wajib ada'),
   }),
 });
@@ -36,7 +36,7 @@ export const transferSchema = z.object({
   body: z.object({
     sender_id: z.uuid('ID pengirim tidak valid'),
     receiver_id: z.uuid('ID penerima tidak valid'),
-    amount: z.number().positive('Jumlah transfer harus lebih dari 0'),
+    amount: z.number().min(0.01, 'Jumlah harus minimal 0.01').multipleOf(0.01, 'Jumlah tidak boleh memiliki lebih dari 2 angka di belakang koma'),
     reference_id: z.string().min(1, 'reference_id wajib ada'),
   }),
 });

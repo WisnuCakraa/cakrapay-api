@@ -32,12 +32,12 @@ export const topUp = async (walletId: string, amount: number, referenceId: strin
     if (!wallet) throw new AppError(404, 'Wallet tidak ditemukan');
     if (wallet.status === 'SUSPENDED') throw new AppError(403, 'Wallet sedang ditangguhkan');
 
-    const topUpAmount = new Decimal(amount).toDecimalPlaces(2);
-    const newBalance = Decimal.add(wallet.balance, topUpAmount);
-
+    const topUpAmount = new Decimal(amount);
+    if (topUpAmount.decimalPlaces() > 2) throw new AppError(400, 'Presisi jumlah tidak valid (maksimal 2 angka di belakang koma)');
+    if (topUpAmount.lt(0.01)) throw new AppError(400, 'Jumlah minimal adalah 0.01');
     const updatedWallet = await tx.wallet.update({
       where: { id: walletId },
-      data: { balance: newBalance },
+      data: { balance: { increment: topUpAmount } },
     })
 
     await tx.ledger.create({
@@ -62,14 +62,19 @@ export const payment = async (walletId: string, amount: number, referenceId: str
     if (!wallet) throw new AppError(404, 'Wallet tidak ditemukan');
     if (wallet.status === 'SUSPENDED') throw new AppError(403, 'Wallet sedang ditangguhkan');
 
-    const payAmount = new Decimal(amount).toDecimalPlaces(2);
-
+    const payAmount = new Decimal(amount);
+    if (payAmount.decimalPlaces() > 2) throw new AppError(400, 'Presisi jumlah tidak valid (maksimal 2 angka di belakang koma)');
+    if (payAmount.lt(0.01)) throw new AppError(400, 'Jumlah minimal adalah 0.01');
     if (wallet.balance.lt(payAmount)) throw new AppError(400, 'Saldo tidak cukup');
+
+    const ledgerAmount = payAmount.negated();
 
     const updatedWallet = await tx.wallet.update({
       where: { id: walletId },
       data: {
-        balance: Decimal.sub(wallet.balance, payAmount),
+        balance: {
+          increment: ledgerAmount
+        },
       },
     });
 
@@ -77,7 +82,7 @@ export const payment = async (walletId: string, amount: number, referenceId: str
       data: {
         wallet_id: walletId,
         transaction_type: "PAYMENT",
-        amount: payAmount.negated(),
+        amount: ledgerAmount,
         currency: wallet.currency,
         reference_id: referenceId,
       }
@@ -101,17 +106,29 @@ export const transfer = async (senderId: string, receiverId: string, amount: num
     if (sender.currency !== receiver.currency) throw new AppError(400, 'Transfer antar mata uang berbeda belum didukung');
     if (sender.status === "SUSPENDED") throw new AppError(403, 'Wallet Pengirim sedang ditangguhkan');
 
-    const transferAmount = new Decimal(amount).toDecimalPlaces(2);
-
+    const transferAmount = new Decimal(amount);
+    if (transferAmount.decimalPlaces() > 2) throw new AppError(400, 'Presisi jumlah tidak valid (maksimal 2 angka di belakang koma)');
+    if (transferAmount.lt(0.01)) throw new AppError(400, 'Jumlah minimal adalah 0.01');
     if (sender.balance.lt(transferAmount)) throw new AppError(400, 'Saldo pengirim tidak mencukupi');
+
+    const debitAmount = transferAmount.negated();
+    const creditAmount = transferAmount;
 
     await tx.wallet.update({
       where: { id: senderId },
-      data: { balance: Decimal.sub(sender.balance, transferAmount) },
+      data: {
+        balance: {
+          increment: debitAmount
+        }
+      },
     });
     await tx.wallet.update({
       where: { id: receiverId },
-      data: { balance: Decimal.add(receiver.balance, transferAmount) },
+      data: {
+        balance: {
+          increment: creditAmount
+        }
+      },
     });
 
     await tx.ledger.createMany({
@@ -119,14 +136,14 @@ export const transfer = async (senderId: string, receiverId: string, amount: num
         {
           wallet_id: senderId,
           transaction_type: "TRANSFER_OUT",
-          amount: transferAmount.negated(),
+          amount: debitAmount,
           currency: sender.currency,
           reference_id: `${referenceId}-OUT`
         },
         {
           wallet_id: receiverId,
           transaction_type: "TRANSFER_IN",
-          amount: transferAmount,
+          amount: creditAmount,
           currency: receiver.currency,
           reference_id: `${referenceId}-IN`
         }
