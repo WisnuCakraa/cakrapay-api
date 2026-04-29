@@ -118,3 +118,22 @@ export const suspendWallet = async (req: Request, res: Response, next: NextFunct
     next(error);
   }
 };
+
+export const getWalletsByOwner = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { ownerId } = req.params;
+    const result = await WalletService.getWalletsByOwnerId(ownerId);
+    res.status(200).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllWallets = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await WalletService.getAllWallets();
+    res.status(200).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};

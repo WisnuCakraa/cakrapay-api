@@ -187,3 +187,13 @@ export const updateWalletStatus = async (id: string, status: 'ACTIVE' | 'SUSPEND
     data: { status },
   });
 };
+
+export const getWalletsByOwnerId = async (ownerId: string) => {
+  return await prisma.wallet.findMany({
+    where: { owner_id: ownerId },
+  });
+};
+
+export const getAllWallets = async () => {
+  return await prisma.wallet.findMany();
+};

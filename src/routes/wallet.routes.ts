@@ -6,7 +6,9 @@ import {
     paymentWallet,
     suspendWallet,
     topUpWallet,
-    transferFunds
+    transferFunds,
+    getWalletsByOwner,
+    getAllWallets
 } from '../controllers/wallet.controller';
 import { validate } from '../middlewares/wallet.validate';
 import {
@@ -23,8 +25,10 @@ router.post('/:id/topup', validate(topUpSchema), topUpWallet);
 router.post('/:id/payment', validate(paymentSchema), paymentWallet);
 router.post('/transfer', validate(transferSchema), transferFunds);
 
+router.get('/', getAllWallets);
 router.get('/:id', getWallet);
 router.get('/:id/transactions', getTransactions);
+router.get('/user/:ownerId', getWalletsByOwner);
 
 router.patch('/:id/status', suspendWallet);
 
