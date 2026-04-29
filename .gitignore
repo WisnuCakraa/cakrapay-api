@@ -8,3 +8,6 @@ yarn-error.log*
 .DS_Store
 
 /src/generated/prisma
+
+# Testing coverage
+coverage/
