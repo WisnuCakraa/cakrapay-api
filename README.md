@@ -74,21 +74,17 @@ Detailed evidence of edge cases and full testing scenarios can be found in the f
 
 [📄 **Edge Cases Documentation - Wisnu.pdf**](./docs/file/Edge%20Cases%20-%20Docs%20Wisnu.pdf)
 
-Below are some API testing snapshots using Bruno based on edge case conditions:
-
-![Unit Test Coverage](./docs/screenshots/unit-test.png)
-
 ---
 
 ## API Collection (Bruno)
 
 To facilitate testing, an API collection is included that can be directly imported into the **Bruno** application.
 
-- **File Location:** `/docs/bruno-collection/`
+- **Collection File:** [🚀 cakrapay.yml](./docs/bruno/cakrapay.yml)
 - **How to Import:**
   1. Open the **Bruno** application.
   2. Select **Open Collection** in the top left corner.
-  3. Navigate to this project folder at `docs/bruno-collection`.
+  3. Import the file located at `docs/bruno/cakrapay.yml`.
   4. You can immediately try all available endpoints.
 
 ---
