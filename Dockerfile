@@ -11,8 +11,6 @@ COPY . .
 
 RUN yarn build
 
-RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
-
 EXPOSE 3000
 
-CMD ["./entrypoint.sh"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
