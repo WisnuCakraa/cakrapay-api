@@ -15,4 +15,4 @@ RUN yarn build
 EXPOSE 3000
 
 # Debug: cek isi dist/ sebelum jalankan server
-CMD ["sh", "-c", "npx prisma migrate deploy && ls -la dist/ && node dist/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy; echo '=== Checking dist ==='; ls -la dist/; echo '=== Starting server ==='; node dist/server.js"]
