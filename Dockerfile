@@ -11,6 +11,8 @@ COPY . .
 
 RUN yarn build
 
+RUN chmod +x entrypoint.sh
+
 EXPOSE 3000
 
-CMD ["sh", "-c", "yarn deploy && yarn start"]
+CMD ["./entrypoint.sh"]
