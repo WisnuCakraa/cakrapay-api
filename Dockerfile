@@ -13,4 +13,4 @@ RUN yarn build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+CMD ["sh", "-c", "ls -la dist/ && npx prisma migrate deploy && node dist/server.js"]
