@@ -6,7 +6,7 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(`Server Cakrapay API berjalan di http://localhost:${port}`);
+  console.log(`Server Cakrapay running on port ${port}`);
 });
 
 app.get('/health', (req, res) => {
