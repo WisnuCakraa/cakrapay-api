@@ -11,6 +11,8 @@ COPY . .
 
 RUN yarn build
 
+# Expose port aplikasi
 EXPOSE 3000
 
-CMD ["sh", "-c", "ls -la dist/ && npx prisma migrate deploy && node dist/server.js"]
+# Debug: cek isi dist/ sebelum jalankan server
+CMD ["sh", "-c", "npx prisma migrate deploy && ls -la dist/ && node dist/server.js"]
