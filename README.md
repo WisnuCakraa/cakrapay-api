@@ -1,17 +1,43 @@
-# Cakrapay API - E-Wallet System
+<p align="center">
+  <h1 align="center">⚙️ CakraPay API</h1>
+</p>
 
-This system implements a simple core banking standard using Node.js, Express, and PostgreSQL.
+<p align="center">
+  <strong>A robust Core Banking System for managing digital wallets and transactions.</strong>
+</p>
 
-## Tech Stack
+<p align="center">
+  <a href="https://cakrapay-vocagame.vercel.app/">
+    <img src="https://img.shields.io/badge/LIVE%20DEMO-VISIT%20SITE-blueviolet?style=for-the-badge" alt="Live Demo">
+  </a>
+  <img src="https://img.shields.io/badge/LICENSE-MIT-green?style=for-the-badge" alt="License">
+</p>
 
-- **Runtime:** Node.js with TypeScript
-- **Framework:** Express.js
-- **ORM:** Prisma
-- **Database:** PostgreSQL (Dockerized)
-- **Validation:** Zod
-- **Math Engine:** Decimal.js (Handling floating-point issues)
+<p align="center">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=nodejs,express,ts,postgres,prisma,docker,git" />
+  </a>
+</p>
 
-## Key Features
+---
+
+<p align="center">
+  Built with the modern stack for <strong>Vocagame</strong>.<br/>
+  Focusing on clean architecture, financial precision, and a robust testing suite.
+</p>
+
+A premium, high-performance Core Banking API built with **Node.js**, **Express**, and **Prisma**. This project was developed as a technical home test for **Vocagame**, focusing on clean architecture, ACID compliance, and a comprehensive testing suite.
+
+## 🛠️ Tech Stack
+
+- **Runtime:** [Node.js](https://nodejs.org/) with [TypeScript](https://www.typescriptlang.org/)
+- **Framework:** [Express.js](https://expressjs.com/)
+- **ORM:** [Prisma](https://www.prisma.io/)
+- **Database:** [PostgreSQL](https://www.postgresql.org/) (Dockerized)
+- **Validation:** [Zod](https://zod.dev/)
+- **Math Engine:** [Decimal.js](https://mikemcl.github.io/decimal.js/) (Handling floating-point issues)
+
+## ✨ Key Features
 
 1.  **Wallet Management:** Creation of wallets per currency per user.
 2.  **Top-up:** Balance addition with precise decimal validation.
@@ -21,8 +47,9 @@ This system implements a simple core banking standard using Node.js, Express, an
 6.  **Audit Trail (Ledger):** Every balance change is permanently recorded in the Ledger table as the Source of Truth.
 7.  **Idempotency:** Protection against duplicate transactions using `reference_id`.
 
-## How to Run
+## 🚀 How to Run
 
+### Prerequisites
 - Docker & Docker Compose
 - Node.js (v18+)
 - Yarn or NPM
@@ -30,7 +57,7 @@ This system implements a simple core banking standard using Node.js, Express, an
 ### Installation Steps
 1.  **Clone Repository**
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/WisnuCakraa/cakrapay-api.git
     cd cakrapay-api
     ```
 
@@ -56,7 +83,7 @@ This system implements a simple core banking standard using Node.js, Express, an
     yarn dev
     ```
 
-## API Documentation & UAT (User Acceptance Testing)
+## 📊 API Documentation & UAT
 
 | Feature | Method | Endpoint | UAT Scenario | Expected Result |
 | :--- | :--- | :--- | :--- | :--- |
@@ -68,7 +95,7 @@ This system implements a simple core banking standard using Node.js, Express, an
 | **Inquiry** | GET | `/api/wallets/:id` | Check current balance | Balance detail & status appear |
 | **History** | GET | `/api/wallets/:id/transactions` | View account mutations | Transaction list (descending) |
 
-## Testing Evidence
+## 📂 Testing Evidence
 
 Detailed evidence of edge cases and full testing scenarios can be found in the following PDF document:
 
@@ -76,28 +103,13 @@ Detailed evidence of edge cases and full testing scenarios can be found in the f
 
 ---
 
-## API Collection (Bruno)
-
-To facilitate testing, an API collection is included that can be directly imported into the **Bruno** application.
-
-- **Collection File:** [🚀 cakrapay.yml](./docs/bruno/cakrapay.yml)
-- **How to Import:**
-  1. Open the **Bruno** application.
-  2. Select **Open Collection** in the top left corner.
-  3. Import the file located at `docs/bruno/cakrapay.yml`.
-  4. You can immediately try all available endpoints.
-
----
-
-## Unit Test (Jest)
+## 🧪 Unit Test (Jest)
 
 To run unit tests, use: `yarn test --coverage`
 
 ![Unit Test Screenshot](./docs/screenshots/unit-test.png)
 
----
-
-## Design Principles
+## 🏗️ Design Principles
 
 - **Financial Precision:** Using `Decimal.js` to avoid IEEE 754 issues (e.g., 0.1 + 0.2 != 0.3).
 - **Transactional Safety:** Using `prisma.$transaction` to ensure transfer operations do not "hang" if one side fails.
